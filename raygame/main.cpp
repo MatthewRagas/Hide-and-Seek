@@ -71,11 +71,11 @@ int main()
 	BehaviorDecision* fleeDecision = new BehaviorDecision(flee);
 	//------------------------------------------------------------
 	//Branches
-	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 50);
+	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(enemy, 500);
 	BooleanDecision* canSeeDecision = new BooleanDecision(fleeDecision, wanderDecision, canSeeCondition);
 	
-	WithinRangeCondition* canHearCondition = new WithinRangeCondition(enemy, 50);
-	BooleanDecision* canHearDecision = new BooleanDecision(seekDecision, wanderDecision, canHearCondition);
+	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 500);
+	BooleanDecision* canHearDecision = new BooleanDecision( seekDecision, wanderDecision, canHearCondition);
 	//------------------------------------------------------------
 	//adding Decision tree
 	DecisionTreeBehavior* enemyDecisionTree = new DecisionTreeBehavior(canHearDecision);
