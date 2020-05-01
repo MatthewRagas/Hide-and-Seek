@@ -10,17 +10,83 @@
 ********************************************************************************************/
 
 #include "raylib.h"
+#include "Agent.h"
+#include "seekBehavior.h"
+#include "WanderBehavior.h"
+#include "Flee.h"
+#include "Decision.h"
+#include "DecisionTreeBehavior.h"
+#include "BehaviorDecision.h"
+#include "BooleanDecision.h"
+#include "seekBehavior.h"
+#include "WithinRangeCondition.h"
 
 int main()
 {
 	// Initialization
 	//--------------------------------------------------------------------------------------
-	int screenWidth = 800;
-	int screenHeight = 450;
+	int screenWidth = 1920;
+	int screenHeight = 1080;
 
 	InitWindow(screenWidth, screenHeight, "raylib [core] example - basic window");
 
 	SetTargetFPS(60);
+
+	//Create Player
+	Agent* player = new Agent();
+	player->setPosition(Vector2{ 910.0f, 540.0f });
+	player->setSpeed(100.0f);
+
+	//Create enemy
+	Agent* enemy = new Agent();
+	enemy->setPosition(Vector2{ 450.0f, 225.0f });
+	enemy->setSpeed(50.0f);
+
+	Agent* enemy_1 = new Agent();
+	enemy_1->setPosition(Vector2{ 1500.0f, 200.0f });
+	enemy_1->setSpeed(50.0f);
+
+	//Create and add behaviors
+	/*WanderBehavior* wander = new WanderBehavior();
+	seekBehavior* seek = new seekBehavior();
+	seek->setTarget(player);
+	Flee* flee = new Flee();
+	flee->setTarget(enemy_1);*/
+
+	/*player->addBehavior(flee);
+	enemy->addBehavior(seek);
+	enemy_1->addBehavior(wander);*/
+
+	//--------------------------------------------------------------
+	//Leaves of Decision Tree
+	WanderBehavior* wander = new WanderBehavior();
+	BehaviorDecision* wanderDecision = new BehaviorDecision(wander);
+
+	seekBehavior* seek = new seekBehavior();
+	seek->setTarget(player);
+	BehaviorDecision* seekDecision = new BehaviorDecision(seek);
+
+	Flee* flee = new Flee();
+	flee->setTarget(enemy);
+	BehaviorDecision* fleeDecision = new BehaviorDecision(flee);
+	//------------------------------------------------------------
+	//Branches
+	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(player, 50);
+	BooleanDecision* canSeeDecision = new BooleanDecision(fleeDecision, wanderDecision, canSeeCondition);
+	
+	WithinRangeCondition* canHearCondition = new WithinRangeCondition(enemy, 50);
+	BooleanDecision* canHearDecision = new BooleanDecision(seekDecision, wanderDecision, canHearCondition);
+	//------------------------------------------------------------
+	//adding Decision tree
+	DecisionTreeBehavior* enemyDecisionTree = new DecisionTreeBehavior(canHearDecision);
+	DecisionTreeBehavior* playerDecisionTree = new DecisionTreeBehavior(canSeeDecision);
+
+	player->addBehavior(playerDecisionTree);
+	enemy->addBehavior(enemyDecisionTree);
+	enemy_1->addBehavior(enemyDecisionTree);
+
+
+
 	//--------------------------------------------------------------------------------------
 
 	// Main game loop
@@ -29,15 +95,23 @@ int main()
 		// Update
 		//----------------------------------------------------------------------------------
 		// TODO: Update your variables here
+
+		float deltaTime = GetFrameTime();
+
+		player->update(deltaTime);
+		enemy->update(deltaTime);
+		enemy_1->update(deltaTime);
 		//----------------------------------------------------------------------------------
 
 		// Draw
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
-		ClearBackground(RAYWHITE);
+		ClearBackground(BLACK);
 
-		DrawText("Congrats! You created your first window!", 190, 200, 20, LIGHTGRAY);
+		player->draw();
+		enemy->draw();
+		enemy_1->draw();
 
 		EndDrawing();
 		//----------------------------------------------------------------------------------
