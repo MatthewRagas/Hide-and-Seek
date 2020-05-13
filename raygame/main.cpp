@@ -20,6 +20,8 @@
 #include "BooleanDecision.h"
 #include "seekBehavior.h"
 #include "WithinRangeCondition.h"
+#include "Node.h"
+#include "Map.h"
 
 int main()
 {
@@ -40,23 +42,17 @@ int main()
 	//Create enemy
 	Agent* enemy = new Agent();
 	enemy->setPosition(Vector2{ 450.0f, 225.0f });
-	enemy->setSpeed(50.0f);
-
+	enemy->setSpeed(150.0f);
 	Agent* enemy_1 = new Agent();
 	enemy_1->setPosition(Vector2{ 1500.0f, 200.0f });
 	enemy_1->setSpeed(50.0f);
 
-	//Create and add behaviors
-	/*WanderBehavior* wander = new WanderBehavior();
-	seekBehavior* seek = new seekBehavior();
-	seek->setTarget(player);
-	Flee* flee = new Flee();
-	flee->setTarget(enemy_1);*/
+	//Create Map
+	Map map;
+	map.createGraph(75);
+	map.AStarSearch({ 1,1 }, { 5,5 });
 
-	/*player->addBehavior(flee);
-	enemy->addBehavior(seek);
-	enemy_1->addBehavior(wander);*/
-
+	//Decision Tree
 	//--------------------------------------------------------------
 	//Leaves of Decision Tree
 	WanderBehavior* wander = new WanderBehavior();
@@ -74,7 +70,7 @@ int main()
 	WithinRangeCondition* canSeeCondition = new WithinRangeCondition(enemy, 500);
 	BooleanDecision* canSeeDecision = new BooleanDecision(fleeDecision, wanderDecision, canSeeCondition);
 	
-	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 500);
+	WithinRangeCondition* canHearCondition = new WithinRangeCondition(player, 1000);
 	BooleanDecision* canHearDecision = new BooleanDecision( seekDecision, wanderDecision, canHearCondition);
 	//------------------------------------------------------------
 	//adding Decision tree
@@ -83,7 +79,7 @@ int main()
 
 	player->addBehavior(playerDecisionTree);
 	enemy->addBehavior(enemyDecisionTree);
-	enemy_1->addBehavior(enemyDecisionTree);
+	enemy_1->addBehavior(wander);
 
 
 
@@ -107,7 +103,11 @@ int main()
 		//----------------------------------------------------------------------------------
 		BeginDrawing();
 
+		map.draw(50);
+
 		ClearBackground(BLACK);
+
+		
 
 		player->draw();
 		enemy->draw();

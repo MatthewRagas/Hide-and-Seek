@@ -334,6 +334,13 @@ typedef struct Vector2 {
 	float x;
 	float y;
 
+	bool operator ==(Vector2 rhs)
+	{
+		if (x == rhs.x && y == rhs.y)
+			return true;
+		return false;
+	}
+
 	Vector2 operator +(Vector2 rhs)
 	{
 		return Vector2{ x + rhs.x , y + rhs.y };

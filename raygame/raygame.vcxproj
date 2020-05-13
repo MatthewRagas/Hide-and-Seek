@@ -135,11 +135,12 @@
     <ClCompile Include="Behavior.cpp" />
     <ClCompile Include="BehaviorDecision.cpp" />
     <ClCompile Include="BooleanDecision.cpp" />
-    <ClCompile Include="Condition.cpp" />
-    <ClCompile Include="Decision.cpp" />
+    <ClCompile Include="Connections.cpp" />
     <ClCompile Include="DecisionTreeBehavior.cpp" />
     <ClCompile Include="Flee.cpp" />
     <ClCompile Include="main.cpp" />
+    <ClCompile Include="Map.cpp" />
+    <ClCompile Include="Node.cpp" />
     <ClCompile Include="seekBehavior.cpp" />
     <ClCompile Include="WanderBehavior.cpp" />
     <ClCompile Include="WithinRangeCondition.cpp" />
@@ -150,9 +151,12 @@
     <ClInclude Include="BehaviorDecision.h" />
     <ClInclude Include="BooleanDecision.h" />
     <ClInclude Include="Condition.h" />
+    <ClInclude Include="Connections.h" />
     <ClInclude Include="Decision.h" />
     <ClInclude Include="DecisionTreeBehavior.h" />
     <ClInclude Include="Flee.h" />
+    <ClInclude Include="Map.h" />
+    <ClInclude Include="Node.h" />
     <ClInclude Include="seekBehavior.h" />
     <ClInclude Include="WanderBehavior.h" />
     <ClInclude Include="WithinRangeCondition.h" />
